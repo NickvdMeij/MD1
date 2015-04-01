@@ -1,0 +1,28 @@
+<ion-view view-title="Venue">
+  <ion-content ng-init="loadOne()">
+  	<div class="card">
+  		<div class="item item-text-wrap">
+		    <h1>{{singleVenue.name}}</h1>
+		    <h2>{{singleVenue.tagLine}}</h2>
+		    <p><b>{{singleVenue.description}}</b></p>
+		    <button class="button button-balanced" ng-click="openWebpage(singleVenue.website_url)">Website</button>
+		    <button class="button button-positive" ng-click="openWebpage(singleVenue.facebook_url)">Facebook</button>
+	    </div>
+    </div>
+
+    <div class="card">
+  		<div class="item item-text-wrap">
+		    <h3>Address:</h3>
+		    <p ng-repeat="addressRow in singleVenue.address">{{addressRow}}</p>
+    	</div>
+    </div>
+
+    <div class="card">
+  		<div class="item item-text-wrap">
+		    <h3>Tags:</h3>
+		    <p ng-repeat="tag in singleVenue.tags">{{tag}}</p>
+    	</div>
+    </div>
+
+  </ion-content>
+</ion-view>
