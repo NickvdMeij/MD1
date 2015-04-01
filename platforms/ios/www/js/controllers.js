@@ -4,7 +4,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('VenuesCtrl', function($scope, Venue, LocalStorage, $stateParams, $cordovaGeolocation) {
+.controller('VenuesCtrl', function($scope, Venue, LocalStorage, $stateParams, $cordovaGeolocation, $cordovaInAppBrowser) {
 	
 	$scope.venues = LocalStorage.getObject('venues')['results'];
 	$scope.singleVenue = {};
@@ -16,7 +16,7 @@ angular.module('starter.controllers', [])
 				$scope.venues = venues['results'];
 			});	
 		}
-	}
+	};
 
 	$scope.loadOne = function(){
 		Venue.get({
@@ -24,7 +24,7 @@ angular.module('starter.controllers', [])
 		},function(venue){
 			$scope.singleVenue = venue;
 		});	
-	}
+	};
 
 	$scope.loadFromLocation = function(){
 		var posOptions = {timeout: 10000, enableHighAccuracy: false};
@@ -45,5 +45,15 @@ angular.module('starter.controllers', [])
 					name: "Failed to retrieve venues based on geolocation"
 				}];
 			});
+	};
+
+	$scope.openWebpage = function(url){
+		var defaultOptions = {
+		    location: 'yes',
+		    clearcache: 'yes',
+		    toolbar: 'no'
+		};
+
+		$cordovaInAppBrowser.open(url, '_system', defaultOptions);
 	}
 })
