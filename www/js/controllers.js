@@ -48,6 +48,6 @@ angular.module('starter.controllers', [])
 	};
 
 	$scope.openWebpage = function(url){
-		$cordovaInAppBrowser.open(url, '_system');
+		$cordovaInAppBrowser.open(url, '_self');
 	}
 })
