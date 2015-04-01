@@ -48,6 +48,12 @@ angular.module('starter.controllers', [])
 	};
 
 	$scope.openWebpage = function(url){
-		$cordovaInAppBrowser.open(url, '_system', 'location=yes');
+		var defaultOptions = {
+		    location: 'yes',
+		    clearcache: 'yes',
+		    toolbar: 'no'
+		};
+
+		$cordovaInAppBrowser.open(url, '_system', defaultOptions);
 	}
 })
