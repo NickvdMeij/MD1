@@ -51,7 +51,7 @@ angular.module('starter.controllers', ['ngCordova'])
 
 	$scope.openWebpage = function(url){
 		$ionicPlatform.ready(function() {
-			$cordovaInAppBrowser.open(url, '_system');
+			window.open(url, '_system');
 		});
 	}
 })
