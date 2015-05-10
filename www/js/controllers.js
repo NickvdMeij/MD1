@@ -4,7 +4,7 @@ angular.module('starter.controllers', ['ngCordova'])
 
 })
 
-.controller('VenuesCtrl', function($scope, Venue, LocalStorage, $stateParams, $cordovaGeolocation, $cordovaInAppBrowser) {
+.controller('VenuesCtrl', function($scope, Venue, LocalStorage, $stateParams, $cordovaGeolocation, $cordovaInAppBrowser, $ionicPlatform) {
 	
 	$scope.venues = LocalStorage.getObject('venues')['results'];
 	$scope.singleVenue = {};
@@ -28,26 +28,35 @@ angular.module('starter.controllers', ['ngCordova'])
 
 	$scope.loadFromLocation = function(){
 		var posOptions = {timeout: 10000, enableHighAccuracy: false};
-		$cordovaGeolocation
-			.getCurrentPosition(posOptions)
-			.then(function (position) {
-		  		var latitude  = position.coords.latitude;
-		  		var longitude = position.coords.longitude;
+		$ionicPlatform.ready(function() {
+			$cordovaGeolocation
+				.getCurrentPosition(posOptions)
+				.then(function (position) {
+			  		var latitude  = position.coords.latitude;
+			  		var longitude = position.coords.longitude;
 
-		  		Venue.get({
-					max_distance: 5000,
-					geolocation: latitude+','+longitude
-				}, function(venues){
-					$scope.geoVenues = venues['results'];
+			  		Venue.get({
+						max_distance: 5000,
+						geolocation: latitude+','+longitude
+					}, function(venues){
+						$scope.geoVenues = venues['results'];
+					});
+				}, function(err) {
+					$scope.geoVenues = [{
+						name: "Failed to retrieve venues based on geolocation"
+					}];
 				});
-			}, function(err) {
-				$scope.geoVenues = [{
-					name: "Failed to retrieve venues based on geolocation"
-				}];
-			});
+		});
 	};
 
 	$scope.openWebpage = function(url){
-		window.open(url, '_system', 'location=yes');
+
+		var options = {
+	      location: 'no'
+	    };
+
+		$ionicPlatform.ready(function() {
+			$cordovaInAppBrowser.open(url, '_system', options);
+		});
 	}
 })
