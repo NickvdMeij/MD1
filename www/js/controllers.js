@@ -50,13 +50,8 @@ angular.module('starter.controllers', ['ngCordova'])
 	};
 
 	$scope.openWebpage = function(url){
-
-		var options = {
-	      location: 'no'
-	    };
-
 		$ionicPlatform.ready(function() {
-			$cordovaInAppBrowser.open(url, '_system', options);
+			$cordovaInAppBrowser.open(url, '_system');
 		});
 	}
 })
