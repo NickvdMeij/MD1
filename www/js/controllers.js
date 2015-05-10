@@ -29,6 +29,7 @@ angular.module('starter.controllers', ['ngCordova'])
 	$scope.loadFromLocation = function(){
 		$scope.loading=true;
 		$scope.error=false;
+		
 		var posOptions = {timeout: 10000, enableHighAccuracy: false};
 		$ionicPlatform.ready(function() {
 			$cordovaGeolocation
@@ -52,7 +53,7 @@ angular.module('starter.controllers', ['ngCordova'])
 
 	$scope.openWebpage = function(url){
 		$ionicPlatform.ready(function() {
-			window.open(url, '_system');
+			$cordovaInAppBrowser.open(url, '_system', 'location=yes');
 		});
 	}
 })
