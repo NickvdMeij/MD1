@@ -10,12 +10,12 @@ angular.module('starter.controllers', ['ngCordova'])
 	$scope.singleVenue = {};
 
 	$scope.loadAll = function(){
-		if(!LocalStorage.getObject('venues')['results']){
-			Venue.query(function(venues){
-				LocalStorage.setObject('venues', venues);
-				$scope.venues = venues['results'];
-			});	
-		}
+		$scope.loading = true;
+		Venue.query(function(venues){
+			LocalStorage.setObject('venues', venues);
+			$scope.venues = venues['results'];
+			$scope.loading = false;
+		});	
 	};
 
 	$scope.loadOne = function(){
@@ -27,6 +27,8 @@ angular.module('starter.controllers', ['ngCordova'])
 	};
 
 	$scope.loadFromLocation = function(){
+		$scope.loading=true;
+		$scope.error=false;
 		var posOptions = {timeout: 10000, enableHighAccuracy: false};
 		$ionicPlatform.ready(function() {
 			$cordovaGeolocation
@@ -40,11 +42,10 @@ angular.module('starter.controllers', ['ngCordova'])
 						geolocation: latitude+','+longitude
 					}, function(venues){
 						$scope.geoVenues = venues['results'];
+						$scope.loading = false;
 					});
 				}, function(err) {
-					$scope.geoVenues = [{
-						name: "Failed to retrieve venues based on geolocation"
-					}];
+					$scope.error = true;
 				});
 		});
 	};
