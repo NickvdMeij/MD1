@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['ngCordova'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope) {
 
 })
 

@@ -1,21 +1,25 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ngCordova'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $cordovaSplashscreen) {
+	$cordovaSplashscreen.show();
 
+	setTimeout(function(){
+		$cordovaSplashscreen.hide();
+	}, 5000);
 })
 
-.controller('VenuesCtrl', function($scope, Venue, LocalStorage, $stateParams, $cordovaGeolocation, $cordovaInAppBrowser) {
+.controller('VenuesCtrl', function($scope, Venue, LocalStorage, $stateParams, $cordovaGeolocation, $cordovaInAppBrowser, $ionicPlatform) {
 	
 	$scope.venues = LocalStorage.getObject('venues')['results'];
 	$scope.singleVenue = {};
 
 	$scope.loadAll = function(){
-		if(!LocalStorage.getObject('venues')['results']){
-			Venue.query(function(venues){
-				LocalStorage.setObject('venues', venues);
-				$scope.venues = venues['results'];
-			});	
-		}
+		$scope.loading = true;
+		Venue.query(function(venues){
+			LocalStorage.setObject('venues', venues);
+			$scope.venues = venues['results'];
+			$scope.loading = false;
+		});	
 	};
 
 	$scope.loadOne = function(){
@@ -27,33 +31,33 @@ angular.module('starter.controllers', [])
 	};
 
 	$scope.loadFromLocation = function(){
-		var posOptions = {timeout: 10000, enableHighAccuracy: false};
-		$cordovaGeolocation
-			.getCurrentPosition(posOptions)
-			.then(function (position) {
-		  		var latitude  = position.coords.latitude;
-		  		var longitude = position.coords.longitude;
+		$scope.loading=true;
+		$scope.error=false;
 
-		  		Venue.get({
-					max_distance: 5000,
-					geolocation: latitude+','+longitude
-				}, function(venues){
-					$scope.geoVenues = venues['results'];
+		var posOptions = {timeout: 10000, enableHighAccuracy: false};
+		$ionicPlatform.ready(function() {
+			$cordovaGeolocation
+				.getCurrentPosition(posOptions)
+				.then(function (position) {
+			  		var latitude  = position.coords.latitude;
+			  		var longitude = position.coords.longitude;
+
+			  		Venue.get({
+						max_distance: 5000,
+						geolocation: latitude+','+longitude
+					}, function(venues){
+						$scope.geoVenues = venues['results'];
+						$scope.loading = false;
+					});
+				}, function(err) {
+					$scope.error = true;
 				});
-			}, function(err) {
-				$scope.geoVenues = [{
-					name: "Failed to retrieve venues based on geolocation"
-				}];
-			});
+		});
 	};
 
 	$scope.openWebpage = function(url){
-		var defaultOptions = {
-		    location: 'yes',
-		    clearcache: 'yes',
-		    toolbar: 'no'
-		};
-
-		$cordovaInAppBrowser.open(url, '_system', defaultOptions);
+		$ionicPlatform.ready(function() {
+			window.open(url, '_system');
+		});
 	}
 })
