@@ -1,6 +1,6 @@
-angular.module('starter.services', ['ngResource'])
+var module = angular.module('starter.services', ['ngResource']);
 
-.factory('Venue', function($resource) {
+module.factory('Venue', function($resource) {
 	return $resource('https://api.eet.nu/venues/:id', {
 		id: '@_id'
 	},{
@@ -8,7 +8,7 @@ angular.module('starter.services', ['ngResource'])
 	})
 })
 
-.factory('LocalStorage', function($window) {
+module.factory('LocalStorage', function($window) {
   return {
     set: function(key, value) {
       $window.localStorage[key] = value;

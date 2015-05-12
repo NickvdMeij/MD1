@@ -1,13 +1,14 @@
-angular.module('starter.controllers', ['ngCordova'])
+var module = angular.module('starter.controllers', ['ngCordova']);
 
-.controller('AppCtrl', function($scope) {
+module.controller('AppCtrl', function($scope) {
 
-})
+});
 
-.controller('VenuesCtrl', function($scope, Venue, LocalStorage, $stateParams, $cordovaGeolocation, $cordovaInAppBrowser, $ionicPlatform) {
+module.controller('VenuesCtrl', function($scope, Venue, LocalStorage, $stateParams, $cordovaGeolocation, $cordovaInAppBrowser, $ionicPlatform) {
 	
 	$scope.venues = LocalStorage.getObject('venues')['results'];
 	$scope.singleVenue = {};
+	$scope.loading = true;
 
 	$scope.loadAll = function(){
 		$scope.loading = true;
@@ -56,4 +57,4 @@ angular.module('starter.controllers', ['ngCordova'])
 			window.open(url, '_system');
 		});
 	}
-})
+});
